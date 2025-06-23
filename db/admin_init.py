@@ -3,7 +3,6 @@ import os
 import uuid
 
 from dotenv import load_dotenv
-from sqlalchemy import select
 from database import async_session_factory
 from models import AppUsers, Roles, Permissions, Employers, TelegramUsers, RolePermissions
 
@@ -13,10 +12,13 @@ load_dotenv()
 async def init_role(session_factory):
     async with session_factory() as session:
         try:
-            role = Roles(id=uuid.uuid4(), name='Admin', description='Head admin')
-            session.add(role)
+            role_admin = Roles(id=uuid.uuid4(), name='Admin', description='Head admin')
+            role_user = Roles(id=uuid.uuid4(), name='User', description='user')
+            role_guest = Roles(id=uuid.uuid4(), name='Guest', description='guest')
+            role_librarian = Roles(id=uuid.uuid4(), name='Librarian', description='librarian')
+            session.add_all([role_admin, role_user, role_guest, role_librarian])
             await session.commit()
-            return role.id
+            return role_admin.id
         except Exception as e:
             await session.rollback()
             raise e
