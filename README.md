@@ -65,14 +65,5 @@ Below is the latest code coverage report based on the test results:
 
 <!-- COVERAGE START -->
 ```
-Name                          Stmts   Miss  Cover
--------------------------------------------------
-db/queries/book_crud.py         109      8    93%
-db/queries/location_crud.py      85      6    93%
-db/queries/order_crud.py        109      5    95%
-db/queries/user_crud.py          70      0   100%
-db/queries/wishlist_crud.py      68      5    93%
--------------------------------------------------
-TOTAL                           441     24    95%
 ```
 <!-- COVERAGE END -->
