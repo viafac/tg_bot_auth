@@ -6,7 +6,7 @@ from logging.config import fileConfig
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 from alembic import context
-from db.database import DATABASE_URL
+from db.database import DATABASE_URL, TEST_DATABASE_URL
 from db.models import *
 
 config = context.config
@@ -24,13 +24,13 @@ for arg in sys.argv:
 
 if db_name == "main_db":
     db_url = DATABASE_URL
-# elif db_name == "test_db":
-#     db_url = TEST_DATABASE_URL
+elif db_name == "test_db":
+    db_url = TEST_DATABASE_URL
 else:
     raise ValueError(f"Unknown database section: {db_name}")
 
 config.set_section_option("main_db", "sqlalchemy.url", DATABASE_URL)
-# config.set_section_option("test_db", "sqlalchemy.url", TEST_DATABASE_URL)
+config.set_section_option("test_db", "sqlalchemy.url", TEST_DATABASE_URL)
 
 
 def run_migrations_offline() -> None:

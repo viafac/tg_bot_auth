@@ -4,13 +4,14 @@ import logging
 
 from dotenv import load_dotenv
 from aiogram import Bot, Dispatcher
-
+from bot.handlers.user_registration import user_reg_router
 
 load_dotenv()
 TOKEN = os.getenv("BOT_TOKEN")
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
+dp.include_router(user_reg_router)
 
 
 async def main():

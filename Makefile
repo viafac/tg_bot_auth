@@ -39,6 +39,6 @@ history:
 	$(ALEMBIC_CMD) history
 
 create_admin:
-	$(DOCKER_EXEC) python db/admin_init.py
+	$(DOCKER_EXEC) python db/default_data_init.py
 
 all: upgrade create_admin

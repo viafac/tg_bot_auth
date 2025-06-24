@@ -1,3 +1,5 @@
+import uuid
+
 from sqlalchemy import ForeignKey, String, Boolean, DateTime, UUID, func
 from sqlalchemy.orm import Mapped, mapped_column, DeclarativeBase
 
@@ -9,7 +11,7 @@ class Base(DeclarativeBase):
 class Roles(Base):
     __tablename__ = "roles"
 
-    id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), primary_key=True)
+    id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     name: Mapped[str] = mapped_column(String(30), nullable=False, unique=True)
     description: Mapped[str] = mapped_column(String(250))
     created_at: Mapped[DateTime] = mapped_column(DateTime, server_default=func.now())
@@ -19,7 +21,7 @@ class Roles(Base):
 class Permissions(Base):
     __tablename__ = "permissions"
 
-    id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), primary_key=True)
+    id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     name: Mapped[str] = mapped_column(String(50))
     description: Mapped[str] = mapped_column(String(250))
     created_at: Mapped[DateTime] = mapped_column(DateTime, server_default=func.now())
@@ -44,7 +46,7 @@ class RolePermissions(Base):
 class TelegramUsers(Base):
     __tablename__ = 'telegram_users'
 
-    id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), primary_key=True)
+    id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     telegram_id: Mapped[str] = mapped_column(String(20), unique=True)
     username: Mapped[str] = mapped_column(String(250), nullable=False)
     created_at: Mapped[DateTime] = mapped_column(DateTime, server_default=func.now())
@@ -54,7 +56,7 @@ class TelegramUsers(Base):
 class Employers(Base):
     __tablename__ = 'employers'
 
-    id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), primary_key=True)
+    id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     full_name: Mapped[str] = mapped_column(String(50), nullable=False)
     email: Mapped[str] = mapped_column(String(50), nullable=False)
     is_verified: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
@@ -65,7 +67,7 @@ class Employers(Base):
 class AppUsers(Base):
     __tablename__ = 'app_users'
 
-    id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), primary_key=True)
+    id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     telegram_user_id: Mapped[UUID] = mapped_column(
         UUID(as_uuid=True),
         ForeignKey("telegram_users.id", ondelete="CASCADE"),
@@ -91,7 +93,7 @@ class AppUsers(Base):
 class AppUsersHistory(Base):
     __tablename__ = 'app_users_history'
 
-    id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), primary_key=True)
+    id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
 
     telegram_user_id: Mapped[UUID] = mapped_column(
         UUID(as_uuid=True),
