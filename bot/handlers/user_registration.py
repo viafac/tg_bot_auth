@@ -26,7 +26,6 @@ async def cmd_start(message: Message):
                 "It will only take a minute. Shall we get started?",
                 reply_markup=registration_kb
             )
-            return
 
 
 @user_reg_router.callback_query(F.data == "reg_no")
@@ -83,7 +82,7 @@ async def reg_role_guest(callback: CallbackQuery):
             parse_mode='HTML'
         )
         await callback.answer()
-    else:
+    if not reg_new_user:
         await callback.message.answer('Please try again later.')
 
 
@@ -105,9 +104,8 @@ async def reg_name(message: Message, state: FSMContext):
             await message.answer('Please enter verification code: ')
             await state.update_data(verification_code=code)
             await state.set_state(Registration.confirm_code)
-        else:
-            await message.answer('Please try again later')
-    else:
+
+    if not working_email:
         await message.answer('Incorrect email, please try again.', reply_markup=back_to_email)
         await state.set_state(Registration.email)
 
@@ -142,7 +140,7 @@ async def reg_confirm(message: Message, state: FSMContext):
                 parse_mode='HTML'
             )
             await state.clear()
-    else:
+    if code != message.text:
         await message.answer('Verification code is wrong, please try again', reply_markup=resend_code)
 
 
@@ -163,5 +161,5 @@ async def reg_resend_code(callback: CallbackQuery, state: FSMContext):
         await callback.message.answer('Please enter verification code: ')
         await state.update_data(verification_code=code)
         await state.set_state(Registration.confirm_code)
-    else:
+    if not send:
         await callback.message.answer('Error')
