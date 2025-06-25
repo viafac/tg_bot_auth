@@ -1,6 +1,6 @@
 import pytest
-from sqlalchemy import select
 
+from sqlalchemy import select
 from sqlalchemy.exc import SQLAlchemyError
 from bot.queries.app_users import AppUserObj
 from db.models import TelegramUsers
@@ -10,7 +10,6 @@ from db.models import TelegramUsers
 async def test_create_app_user(db_session, sample_tg_users, sample_employers, sample_roles, mocker):
     telegram_user = sample_tg_users[0]
     employer = sample_employers[0]
-
     result_1 = await AppUserObj().create(db_session, telegram_id=telegram_user.id, employer_id=employer.id)
 
     assert result_1 is True

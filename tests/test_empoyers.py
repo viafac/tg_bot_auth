@@ -13,4 +13,5 @@ async def test_create_employer(db_session, mocker):
 
     mocker.patch.object(db_session, 'add', side_effect=SQLAlchemyError("DB error"))
     test_employer_2 = await EmployersObj().create(db_session, full_name='AA bb', email='ab@ventionteams.com')
+
     assert test_employer_2 is None
