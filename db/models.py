@@ -1,6 +1,6 @@
 import uuid
 
-from sqlalchemy import ForeignKey, String, Boolean, DateTime, UUID, func
+from sqlalchemy import ForeignKey, String, Boolean, DateTime, UUID, func, Text
 from sqlalchemy.orm import Mapped, mapped_column, DeclarativeBase
 
 
@@ -121,3 +121,15 @@ class AppUsersHistory(Base):
         ForeignKey("app_users.id", ondelete="CASCADE"),
         nullable=False,
     )
+
+
+class Book(Base):
+    __tablename__ = 'books'
+
+    id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    title: Mapped[str] = mapped_column(String(50), nullable=False)
+    description: Mapped[str] = mapped_column(String(50), nullable=False)
+    author: Mapped[str] = mapped_column(String(50), nullable=False)
+    embedding: Mapped[str] = mapped_column(Text, nullable=True)
+    created_at: Mapped[DateTime] = mapped_column(DateTime, server_default=func.now())
+    updated_at: Mapped[DateTime] = mapped_column(DateTime, server_default=func.now())

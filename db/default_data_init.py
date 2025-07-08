@@ -1,13 +1,19 @@
 import asyncio
 import os
 import uuid
+import psycopg2
 
 from dotenv import load_dotenv
 from sqlalchemy import select
-from database import async_session_factory
-from models import AppUsers, Roles, Permissions, Employers, TelegramUsers, RolePermissions
+from db.database import async_session_factory
+from db.models import AppUsers, Roles, Permissions, Employers, TelegramUsers, RolePermissions
+from langchain_openai import OpenAIEmbeddings
+from psycopg2.extras import execute_values
 
 load_dotenv()
+
+embeddings = OpenAIEmbeddings(openai_api_key=os.getenv("OPENAI_API_KEY"))
+embeddings_model = OpenAIEmbeddings()
 
 
 async def init_role(session_factory):
@@ -179,7 +185,44 @@ async def admin_init(session_factory):
         return True
 
 
+async def init_books():
+    default_books = [
+        {"title": "Python Basics", "description": "Learn Python step by step", "author": "John Smith"},
+        {"title": "Advanced Python", "description": "Deep dive into Python", "author": "Alice Brown"},
+        {"title": "AI for Beginners", "description": "Introduction to AI", "author": "David Lee"},
+        {"title": "Machine Learning 101", "description": "ML fundamentals", "author": "Emma Davis"},
+        {"title": "Data Science Handbook", "description": "Essential DS skills", "author": "Michael Johnson"},
+        {"title": "Web Development with FastAPI", "description": "Build APIs with FastAPI", "author": "Olivia Wilson"},
+        {"title": "SQL for Data Analysis", "description": "SQL queries for beginners", "author": "Chris Martin"},
+        {"title": "Clean Code", "description": "Writing maintainable code", "author": "Robert C. Martin"},
+        {"title": "Algorithms Unlocked", "description": "Intro to algorithms", "author": "Thomas Cormen"},
+        {"title": "Deep Learning Simplified", "description": "Deep learning basics", "author": "Sarah Walker"},
+    ]
+
+    conn = psycopg2.connect(os.getenv("DATABASE_URL"))
+
+    records = []
+    for book in default_books:
+        text = f"{book['title']} {book['description']} {book['author']}"
+        vector = embeddings_model.embed_query(text)
+        vector = [float(v) for v in vector]
+
+        records.append((
+            str(uuid.uuid4()), book["title"], book["description"], book["author"], vector
+        ))
+
+    insert_query = """
+        INSERT INTO books (id, title, description, author, embedding)
+        VALUES %s
+    """
+
+    with conn:
+        with conn.cursor() as cur:
+            execute_values(cur, insert_query, records)
+
+
 async def main(session_factory):
+    await init_books()
     await admin_init(session_factory)
     await init_permissions(session_factory)
     await init_role_permissions(session_factory)
