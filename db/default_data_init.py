@@ -5,6 +5,7 @@ import psycopg2
 
 from dotenv import load_dotenv
 from sqlalchemy import select
+
 from db.database import async_session_factory
 from db.models import AppUsers, Roles, Permissions, Employers, TelegramUsers, RolePermissions
 from langchain_openai import OpenAIEmbeddings

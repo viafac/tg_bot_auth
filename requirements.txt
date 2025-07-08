@@ -61,3 +61,8 @@ urllib3==2.5.0
 verboselogs==1.7
 watchdog==6.0.0
 yarl==1.20.1
+langchain==0.3.26
+langchain-community==0.3.27
+langchain-core==0.3.67
+langchain-openai==0.3.27
+langchain-text-splitters==0.3.8
