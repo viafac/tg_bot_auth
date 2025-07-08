@@ -22,8 +22,8 @@ async def handle_message(message: types.Message):
 
     except ValueError as ve:
         logging.warning(f"Validation failed: {ve}")
-        await message.answer("⚠️ Пожалуйста, уточните ваш запрос.")
+        await message.answer("⚠️ Please clarify your request.")
 
     except Exception as e:
         logging.error(f"Unexpected error: {e}")
-        await message.answer("⚠️ Произошла ошибка, попробуйте ещё раз.")
+        await message.answer("⚠️ An error occurred, please try again.")

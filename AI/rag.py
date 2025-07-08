@@ -7,10 +7,6 @@ from AI.templates import recommendation_prompt
 from AI.validation import PromptInput
 from db.default_data_init import embeddings_model
 
-load_dotenv()
-
-logging.basicConfig(level=logging.INFO)
-
 user_context = {}
 
 

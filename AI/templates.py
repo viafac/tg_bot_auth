@@ -18,7 +18,7 @@ Books:
 User question:
 {question}
 
-Respond in the specified format. Answer only in English.
+Respond in the specified format. Answer on same language as user's.
 """)
 
 recommendation_chain = LLMChain(llm=llm, prompt=recommendation_prompt)
